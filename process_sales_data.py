@@ -38,7 +38,7 @@ def get_sales_csv_path():
         sys.exit()
 
 
-    # TODO: Return path of sales data CSV file
+    #Return path of sales data CSV file
     return os.path.abspath(csv_path)
 
 def create_orders_dir(sales_csv_path):
@@ -77,7 +77,7 @@ def process_sales_data(sales_csv_path, orders_dir_path):
     df = pd.read_csv(sales_csv_path)
 
     # Insert a new "TOTAL PRICE" column into the DataFrame
-    df.insert(7, 'TOTAL PRICE', DF['item quantity'] * df['ITEM PRICE'])
+    df.insert(7, 'TOTAL PRICE', df['item quantity'] * df['ITEM PRICE'])
 
     # Remove columns from the DataFrame that are not needed
     df.drop(columns= ['ADDRESS', 'CITY', 'STATE', 'POSTAL CODE', 'COUNTRY'], inplace=True)
@@ -105,14 +105,24 @@ def process_sales_data(sales_csv_path, orders_dir_path):
 
         # Export the data to an Excel sheet
         worksheet_name = f'Order_ID #{order_id}'
-        order_df.to_excel(order_excel_path, index=False, sheet_name=worksheet_name)
+        #(other way of writing that): order_df.to_excel(order_excel_path, index=False, sheet_name=worksheet_name)
 
 
+        #Format the Excel sheet
+        writer = pd.ExcelWriter("pandas_column_format.xlsx", engine="xlsxwriter")
 
-        # TODO: Format the Excel sheet
-        # TODO: Define format for the money columns
+        df.to_excel(writer, sheet_name= "order_df")
+
+        #Define format for the money columns
+        format1 = order_df.add_format({"num_format":"$#,##0.00"})
+
         # TODO: Format each colunm
+        order_df.set_column(6, 7, None, format1)
+
         # TODO: Close the Excelwriter 
+        writer.close()
+
+
     return
 
 if __name__ == '__main__':

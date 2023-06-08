@@ -29,7 +29,7 @@
             "program": "process_sales_data.py",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "args": ["sales_data.csv"]
+            "args": ["sales_data0.csv"]
         }
     ]
 }
